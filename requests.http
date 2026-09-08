@@ -1,0 +1,15 @@
+@baseUrl = http://localhost:3000
+
+### Create incident
+POST {{baseUrl}}/incidents
+Content-Type: application/json
+
+{
+  "referenceCode": " inc-003 ",
+  "title": "Email service unavailable",
+  "description": "Users cannot access their email accounts.",
+  "status": "OPEN"
+}
+
+### List incidents
+GET {{baseUrl}}/incidents
