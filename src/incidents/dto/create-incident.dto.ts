@@ -21,4 +21,11 @@ export class CreateIncidentDto {
   @IsOptional()
   @IsEnum(IncidentStatus)
   status?: IncidentStatus;
+
+  @Transform(({ value }) =>
+    typeof value === 'string' ? value.trim().toUpperCase() : value,
+  )
+  @IsString()
+  @IsNotEmpty()
+  categoryCode: string;
 }

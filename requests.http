@@ -1,15 +1,43 @@
 @baseUrl = http://localhost:3000
 
+### List incidents
+GET {{baseUrl}}/incidents
+
+### List categories
+GET {{baseUrl}}/categories
+
 ### Create incident
 POST {{baseUrl}}/incidents
 Content-Type: application/json
 
 {
-  "referenceCode": " inc-003 ",
-  "title": "Email service unavailable",
-  "description": "Users cannot access their email accounts.",
-  "status": "OPEN"
+  "referenceCode": " inc-004 ",
+  "title": "Falla de red",
+  "description": "No hay conexion en recepcion",
+  "status": "OPEN",
+  "categoryCode": " network "
 }
 
-### List incidents
-GET {{baseUrl}}/incidents
+### Create incident with missing category
+POST {{baseUrl}}/incidents
+Content-Type: application/json
+
+{
+  "referenceCode": "inc-005",
+  "title": "Categoria inexistente",
+  "description": "Debe responder 404",
+  "status": "OPEN",
+  "categoryCode": "unknown"
+}
+
+### Create duplicated incident
+POST {{baseUrl}}/incidents
+Content-Type: application/json
+
+{
+  "referenceCode": "inc-004",
+  "title": "Referencia duplicada",
+  "description": "Debe responder 409",
+  "status": "OPEN",
+  "categoryCode": "network"
+}

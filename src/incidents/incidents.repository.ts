@@ -7,11 +7,29 @@ export class IncidentsRepository {
   constructor(private readonly prisma: PrismaService) {}
 
   create(data: Prisma.IncidentCreateInput) {
-    return this.prisma.incident.create({ data });
+    return this.prisma.incident.create({
+      data,
+      include: {
+        category: {
+          select: {
+            code: true,
+            name: true,
+          },
+        },
+      },
+    });
   }
 
   findAll() {
     return this.prisma.incident.findMany({
+      include: {
+        category: {
+          select: {
+            code: true,
+            name: true,
+          },
+        },
+      },
       orderBy: {
         createdAt: 'desc',
       },
