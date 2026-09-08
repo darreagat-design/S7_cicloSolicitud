@@ -16,6 +16,13 @@ type HttpRequest = {
   url: string;
 };
 
+type ErrorResponse = {
+  code?: string;
+  message?: unknown;
+  details?: unknown;
+  error?: string;
+};
+
 @Catch()
 export class HttpExceptionFilter implements ExceptionFilter {
   catch(exception: unknown, host: ArgumentsHost) {
@@ -33,18 +40,40 @@ export class HttpExceptionFilter implements ExceptionFilter {
 
     const payload =
       typeof exceptionResponse === 'object' && exceptionResponse !== null
-        ? exceptionResponse
+        ? (exceptionResponse as ErrorResponse)
         : {
             message:
               exceptionResponse ??
               HttpStatus[HttpStatus.INTERNAL_SERVER_ERROR],
           };
 
+    const message =
+      statusCode === HttpStatus.INTERNAL_SERVER_ERROR
+        ? 'Internal server error'
+        : payload.message;
+
     response.status(statusCode).json({
-      statusCode,
       timestamp: new Date().toISOString(),
       path: request.url,
-      ...payload,
+      error: {
+        statusCode,
+        code: payload.code ?? this.getDefaultCode(statusCode),
+        message,
+        ...(payload.details ? { details: payload.details } : {}),
+      },
     });
+  }
+
+  private getDefaultCode(statusCode: number) {
+    switch (statusCode) {
+      case HttpStatus.BAD_REQUEST:
+        return 'BAD_REQUEST';
+      case HttpStatus.NOT_FOUND:
+        return 'NOT_FOUND';
+      case HttpStatus.CONFLICT:
+        return 'CONFLICT';
+      default:
+        return 'INTERNAL_SERVER_ERROR';
+    }
   }
 }

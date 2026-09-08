@@ -17,7 +17,10 @@ export class IncidentsService {
     );
 
     if (!category) {
-      throw new NotFoundException('Category not found');
+      throw new NotFoundException({
+        code: 'CATEGORY_NOT_FOUND',
+        message: 'Category not found',
+      });
     }
 
     try {
@@ -35,7 +38,10 @@ export class IncidentsService {
         error instanceof Prisma.PrismaClientKnownRequestError &&
         error.code === 'P2002'
       ) {
-        throw new ConflictException('Incident referenceCode already exists');
+        throw new ConflictException({
+          code: 'INCIDENT_REFERENCE_CONFLICT',
+          message: 'Incident referenceCode already exists',
+        });
       }
 
       throw error;

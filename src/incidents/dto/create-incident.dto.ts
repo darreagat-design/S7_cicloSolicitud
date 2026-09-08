@@ -10,10 +10,12 @@ export class CreateIncidentDto {
   @IsNotEmpty()
   referenceCode: string;
 
+  @Transform(({ value }) => (typeof value === 'string' ? value.trim() : value))
   @IsString()
   @IsNotEmpty()
   title: string;
 
+  @Transform(({ value }) => (typeof value === 'string' ? value.trim() : value))
   @IsOptional()
   @IsString()
   description?: string | null;

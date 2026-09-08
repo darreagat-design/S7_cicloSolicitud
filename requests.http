@@ -11,8 +11,8 @@ POST {{baseUrl}}/incidents
 Content-Type: application/json
 
 {
-  "referenceCode": " inc-004 ",
-  "title": "Falla de red",
+  "referenceCode": " inc-100 ",
+  "title": " Falla de conectividad ",
   "description": "No hay conexion en recepcion",
   "status": "OPEN",
   "categoryCode": " network "
@@ -23,7 +23,7 @@ POST {{baseUrl}}/incidents
 Content-Type: application/json
 
 {
-  "referenceCode": "inc-005",
+  "referenceCode": "inc-101",
   "title": "Categoria inexistente",
   "description": "Debe responder 404",
   "status": "OPEN",
@@ -35,9 +35,34 @@ POST {{baseUrl}}/incidents
 Content-Type: application/json
 
 {
-  "referenceCode": "inc-004",
+  "referenceCode": "inc-100",
   "title": "Referencia duplicada",
   "description": "Debe responder 409",
   "status": "OPEN",
   "categoryCode": "network"
+}
+
+### Create incident with invalid status
+POST {{baseUrl}}/incidents
+Content-Type: application/json
+
+{
+  "referenceCode": "inc-102",
+  "title": "Estado invalido",
+  "description": "Debe responder 400",
+  "status": "PENDING",
+  "categoryCode": "network"
+}
+
+### Create incident with forbidden categoryId
+POST {{baseUrl}}/incidents
+Content-Type: application/json
+
+{
+  "referenceCode": "inc-103",
+  "title": "Propiedad no permitida",
+  "description": "Debe responder 400 por forbidNonWhitelisted",
+  "status": "OPEN",
+  "categoryCode": "network",
+  "categoryId": "00000000-0000-4000-8000-000000000001"
 }
